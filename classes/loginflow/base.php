@@ -301,6 +301,14 @@ class base {
                     }
                 }
             }
+            foreach (explode(" ",get_config('auth_oidc', 'customclaim')) as $value){
+                if (!isset($userdata[$value])) {
+                    $datacontent = $token->claim($value);
+                    if (!empty($datacontent)) {
+                        $userdata[$value] = $datacontent;
+                    }
+                }
+            }
 
             $updateduser = static::apply_configured_fieldmap_from_token($userdata, $eventtype);
             $userinfo = (array)$updateduser;
